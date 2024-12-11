@@ -26,8 +26,9 @@ yarn-debug.log*
 yarn-error.log*
 
 
-# Ignore the .env file
 .env
+client/.env
+server/.env
 
 # Ignore the node_modules directory
 node_modules/
