@@ -31,3 +31,11 @@ yarn-error.log*
 
 # Ignore the node_modules directory
 node_modules/
+
+
+package-lock.json
+yarn.lock
+
+
+dist/
+build/
