@@ -5,6 +5,15 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import config from "../config";
 
+// Define fetchDetails function outside of the component
+const fetchDetails = async (id) => {
+  const res = await axios
+    .get(`${config.BASE_URL}/api/blogs/${id}`)
+    .catch((err) => console.log(err));
+  const data = await res.data;
+  return data;
+};
+
 const labelStyles = { mb: 1, mt: 2, fontSize: "24px", fontWeight: "bold" };
 
 const BlogDetail = () => {
@@ -19,22 +28,18 @@ const BlogDetail = () => {
       [e.target.name]: e.target.value,
     }));
   };
-  const fetchDetails = async () => {
-    const res = await axios
-      .get(`${config.BASE_URL}/api/blogs/${id}`)
-      .catch((err) => console.log(err));
-    const data = await res.data;
-    return data;
-  };
+
+  // useEffect should depend only on `id`
   useEffect(() => {
-    fetchDetails().then((data) => {
+    fetchDetails(id).then((data) => {
       setBlog(data.blog);
       setInputs({
         title: data.blog.title,
         description: data.blog.description,
       });
     });
-  }, [id, fetchDetails]);  
+  }, [id]);
+
   const sendRequest = async () => {
     const res = await axios
       .put(`${config.BASE_URL}/api/blogs/update/${id}`, {
@@ -46,10 +51,9 @@ const BlogDetail = () => {
     const data = await res.data;
     return data;
   };
-  console.log(blog);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(inputs);
     sendRequest()
       .then((data) => console.log(data))
       .then(() => navigate("/myBlogs/"));
